@@ -16,6 +16,15 @@ import { PermissionsGate } from "@/components/permissions-gate"
 import { SortableTask } from "./sortable-task"
 import { Plus } from 'lucide-react'
 
+type Column = {
+  id: ColumnId;
+  name: string;
+  taskIds: string[];
+}
+
+type Columns = Record<ColumnId, Column>;
+
+
 function DroppableColumn({
   id,
   children,
@@ -52,12 +61,12 @@ function Column({
 }) {
   const bg =
     hintColor === "sky" ? "bg-sky-50 border-sky-200"
-    : hintColor === "amber" ? "bg-amber-50 border-amber-200"
-    : "bg-emerald-50 border-emerald-200"
+      : hintColor === "amber" ? "bg-amber-50 border-amber-200"
+        : "bg-emerald-50 border-emerald-200"
   const titleColor =
     hintColor === "sky" ? "text-sky-700"
-    : hintColor === "amber" ? "text-amber-700"
-    : "text-emerald-700"
+      : hintColor === "amber" ? "text-amber-700"
+        : "text-emerald-700"
 
   return (
     <div className={`rounded-lg border ${bg} p-4`}>
@@ -107,7 +116,7 @@ export function KanbanBoard({ className = "" }: { className?: string }) {
 
     let from: ColumnId | undefined
     let fromIndex = -1
-    for (const [colId, col] of Object.entries(columns) as [ColumnId, (typeof columns)[string]][]) {
+    for (const [colId, col] of Object.entries(columns) as Array<[ColumnId, Column]>) {
       const idx = col.taskIds.indexOf(activeId)
       if (idx !== -1) {
         from = colId
@@ -121,7 +130,7 @@ export function KanbanBoard({ className = "" }: { className?: string }) {
 
     const isOverTask = !!tasks[overId]
     if (isOverTask) {
-      for (const [colId, col] of Object.entries(columns) as [ColumnId, (typeof columns)[string]][]) {
+      for (const [colId, col] of Object.entries(columns) as Array<[ColumnId, Column]>) {
         const idx = col.taskIds.indexOf(overId)
         if (idx !== -1) {
           to = colId

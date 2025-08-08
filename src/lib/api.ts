@@ -1,8 +1,16 @@
+declare global {
+  interface ImportMeta {
+    env: {
+      VITE_API_BASE_URL?: string;
+      [key: string]: any;
+    };
+  }
+}
+
 const TOKEN_KEY = "flowboard.token"
 
 export const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL?.toString() ||
-  "https://trello-like-backend.vercel.app"
+  import.meta.env.VITE_API_BASE_URL?.toString()
 
 export function getAuthToken(): string | null {
   try {
