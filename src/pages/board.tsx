@@ -6,12 +6,18 @@ import { useAuth } from "@/auth/auth-provider"
 import { Link } from "react-router-dom"
 
 export default function BoardPage() {
-  const { seedIfEmpty, currentProjectId, projects } = useAppStore()
-  const { user } = useAuth()
+  const { seedIfEmpty, loadFromBackend, currentProjectId, projects } = useAppStore()
+  const { user, token } = useAuth()
 
   useEffect(() => {
-    seedIfEmpty()
-  }, [seedIfEmpty])
+    if (user && token) {
+      // Cargar datos del backend cuando el usuario esté autenticado
+      loadFromBackend()
+    } else {
+      // Solo usar datos demo si no hay usuario
+      seedIfEmpty()
+    }
+  }, [user, token, loadFromBackend, seedIfEmpty])
 
   return (
     <main className="min-h-screen flex flex-col">
@@ -41,17 +47,16 @@ export default function BoardPage() {
           </div>
         ) : null}
 
-        {projects.length > 0 && currentProjectId ? (
+        {user && projects.length > 0 && currentProjectId ? (
           <KanbanBoard />
-        ) : (
+        ) : user ? (
           <div className="rounded-lg border bg-white p-6 shadow-card">
-            <h3 className="font-semibold">Ningún proyecto seleccionado</h3>
+            <h3 className="font-semibold">Ningún proyecto encontrado</h3>
             <p className="text-neutral-600">
-              Usa el selector de proyectos en la barra superior para crear o
-              elegir uno.
+              Usa el selector de proyectos en la barra superior para crear tu primer proyecto.
             </p>
           </div>
-        )}
+        ) : null}
       </div>
     </main>
   )

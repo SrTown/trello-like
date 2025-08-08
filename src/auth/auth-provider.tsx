@@ -5,7 +5,7 @@ import { apiPost, setAuthToken, getAuthToken, decodeJwt } from "@/lib/api"
 
 type AuthContextType = {
   user: User | null
-  users: User[] // minimal list for assignee dropdowns
+  users: User[]
   register: (input: { name: string; email: string; password: string; role: Role }) => Promise<{ ok: boolean; error?: string }>
   login: (input: { email: string; password: string }) => Promise<{ ok: boolean; error?: string }>
   logout: () => Promise<void>
@@ -38,15 +38,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const res = await apiPost<{ ok: boolean; message?: string; token?: string }>("/auth/login", {
         email: input.email,
-        password_hash: input.password, // backend expects 'password_hash' with plain text
+        password_hash: input.password, // texto plano, el backend lo maneja
       })
       if (!res?.ok || !res?.token) {
-        return { ok: false, error: res?.message || "Invalid credentials" }
+        return { ok: false, error: res?.message || "Credenciales inválidas" }
       }
       setAuthToken(res.token)
       setToken(res.token)
 
-      type Payload = { id?: string }
+      type Payload = { id?: string; userLanguage?: string; typeUser?: string }
       const payload = decodeJwt<Payload>(res.token) || {}
       const nextUser: User = {
         id: (payload.id as string) || crypto.randomUUID(),
@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem(AUTH_USER_KEY, JSON.stringify(nextUser))
       return { ok: true }
     } catch {
-      return { ok: false, error: "Unable to sign in. Network error." }
+      return { ok: false, error: "No se pudo iniciar sesión. Error de red." }
     }
   }
 
@@ -68,14 +68,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const res = await apiPost<{ ok: boolean; message?: string }>("/auth/signup", {
         name: input.name,
         email: input.email,
-        password_hash: input.password, // backend will hash it
+        password_hash: input.password,
       })
       if (!res?.ok) {
-        return { ok: false, error: res?.message || "Unable to register" }
+        return { ok: false, error: res?.message || "No se pudo registrar" }
       }
       return await login({ email: input.email, password: input.password })
     } catch {
-      return { ok: false, error: "Unable to register. Network error." }
+      return { ok: false, error: "No se pudo registrar. Error de red." }
     }
   }
 

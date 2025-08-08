@@ -58,7 +58,7 @@ export default function LoginPage() {
               placeholder="Tu contraseña"
             />
           </div>
-          {error ? <div className="text-sm text-rose-600">{error}</div> : null}
+        {error ? <div className="text-sm text-rose-600">{error}</div> : null}
           <button
             type="submit"
             disabled={loading}

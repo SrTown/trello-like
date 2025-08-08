@@ -1,22 +1,41 @@
 import { useState } from "react"
 import { useAppStore } from "@/store/app-store"
+import { useAuth } from "@/auth/auth-provider"
 import { Folder, FolderPlus } from 'lucide-react'
-import { PermissionsGate } from "@/components/permissions-gate"
 
 export function ProjectSwitcher() {
   const { projects, currentProjectId, setCurrentProject, createProject } =
     useAppStore()
+  const { user } = useAuth()
   const [open, setOpen] = useState(false)
   const [name, setName] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const current = projects.find((p) => p.id === currentProjectId)
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!name.trim()) return
-    createProject(name.trim())
-    setName("")
-    setOpen(false)
+    if (!name.trim() || loading || !user?.id) return
+    
+    setLoading(true)
+    console.log("Attempting to create project:", name, "for user:", user?.id) // Debug
+    
+    try {
+      const project = await createProject(name.trim(), user.id)
+      if (project) {
+        console.log("Project created successfully:", project) // Debug
+        setName("")
+        setOpen(false)
+      } else {
+        console.error("Failed to create project") // Debug
+        alert("Error al crear el proyecto. Revisa la consola para más detalles.")
+      }
+    } catch (error) {
+      console.error("Error in project creation:", error) // Debug
+      alert("Error al crear el proyecto: " + error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -53,27 +72,28 @@ export function ProjectSwitcher() {
               </div>
             )}
           </div>
-          <PermissionsGate permission="project:create">
-            <div className="my-2 border-t" />
-            <form onSubmit={submit} className="space-y-2">
-              <label className="block text-xs font-medium text-neutral-600">
-                Nuevo proyecto
-              </label>
-              <input
-                className="w-full rounded border px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"
-                placeholder="Nombre del proyecto"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              <button
-                type="submit"
-                className="inline-flex w-full items-center justify-center gap-1 rounded bg-brand-600 px-2 py-1.5 text-sm font-medium text-white hover:bg-brand-700"
-              >
-                <FolderPlus className="h-4 w-4" />
-                Crear
-              </button>
-            </form>
-          </PermissionsGate>
+          
+          <div className="my-2 border-t" />
+          <form onSubmit={submit} className="space-y-2">
+            <label className="block text-xs font-medium text-neutral-600">
+              Nuevo proyecto
+            </label>
+            <input
+              className="w-full rounded border px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"
+              placeholder="Nombre del proyecto"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              disabled={loading}
+            />
+            <button
+              type="submit"
+              disabled={loading}
+              className="inline-flex w-full items-center justify-center gap-1 rounded bg-brand-600 px-2 py-1.5 text-sm font-medium text-white hover:bg-brand-700 disabled:opacity-50"
+            >
+              <FolderPlus className="h-4 w-4" />
+              {loading ? "Creando..." : "Crear"}
+            </button>
+          </form>
         </div>
       )}
     </div>

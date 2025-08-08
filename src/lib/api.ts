@@ -40,14 +40,13 @@ async function request<T>(
       ...(opts?.headers || {}),
     },
     body: body !== undefined ? JSON.stringify(body) : undefined,
-    credentials: "include", // to receive/send cookies if backend sets them
+    credentials: "include",
     ...opts,
   })
   const text = await res.text()
   try {
     return JSON.parse(text) as T
   } catch {
-    // non-JSON responses
     return text as unknown as T
   }
 }
