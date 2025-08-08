@@ -31,7 +31,7 @@ export const useAppStore = create<BoardState & Actions>()(
         const s = get()
         if (s.projects.length === 0) {
           const projectId = nanoid()
-          const project: Project = { id: projectId, name: "Colorful Demo Project", createdAt: Date.now() }
+          const project: Project = { id: projectId, name: "Mi primer proyecto", createdAt: Date.now() }
           const t1: Task = {
             id: nanoid(),
             projectId,

@@ -4,7 +4,8 @@ import { Folder, FolderPlus } from 'lucide-react'
 import { PermissionsGate } from "@/components/permissions-gate"
 
 export function ProjectSwitcher() {
-  const { projects, currentProjectId, setCurrentProject, createProject } = useAppStore()
+  const { projects, currentProjectId, setCurrentProject, createProject } =
+    useAppStore()
   const [open, setOpen] = useState(false)
   const [name, setName] = useState("")
 
@@ -25,7 +26,7 @@ export function ProjectSwitcher() {
         className="inline-flex items-center gap-2 rounded-md bg-white/10 px-3 py-1.5 text-sm text-white hover:bg-white/20 transition"
       >
         <Folder className="h-4 w-4" />
-        {current?.name ?? "Select project"}
+        {current?.name ?? "Seleccionar proyecto"}
       </button>
       {open && (
         <div
@@ -47,16 +48,20 @@ export function ProjectSwitcher() {
                 </button>
               ))
             ) : (
-              <div className="px-2 py-1.5 text-neutral-500 text-sm">No projects</div>
+              <div className="px-2 py-1.5 text-neutral-500 text-sm">
+                Sin proyectos
+              </div>
             )}
           </div>
           <PermissionsGate permission="project:create">
             <div className="my-2 border-t" />
             <form onSubmit={submit} className="space-y-2">
-              <label className="block text-xs font-medium text-neutral-600">New project</label>
+              <label className="block text-xs font-medium text-neutral-600">
+                Nuevo proyecto
+              </label>
               <input
                 className="w-full rounded border px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"
-                placeholder="Project name"
+                placeholder="Nombre del proyecto"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
@@ -65,7 +70,7 @@ export function ProjectSwitcher() {
                 className="inline-flex w-full items-center justify-center gap-1 rounded bg-brand-600 px-2 py-1.5 text-sm font-medium text-white hover:bg-brand-700"
               >
                 <FolderPlus className="h-4 w-4" />
-                Create
+                Crear
               </button>
             </form>
           </PermissionsGate>

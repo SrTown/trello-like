@@ -20,18 +20,22 @@ export default function RegisterPage() {
     if (res.ok) {
       navigate("/board")
     } else {
-      setError(res.error || "Registration failed")
+      setError(res.error || "Error al registrarse")
     }
   }
 
   return (
     <main className="min-h-screen grid place-items-center px-4 bg-gradient-to-br from-pink-50 via-white to-brand-50">
       <div className="w-full max-w-md rounded-xl border bg-white p-6 shadow-card">
-        <h1 className="text-xl font-semibold">Create account</h1>
-        <p className="text-sm text-neutral-600">Start collaborating with your team</p>
+        <h1 className="text-xl font-semibold">Crear cuenta</h1>
+        <p className="text-sm text-neutral-600">
+          Comienza a colaborar con tu equipo
+        </p>
         <form onSubmit={onSubmit} className="mt-4 space-y-3">
           <div className="grid gap-1.5">
-            <label htmlFor="name" className="text-sm font-medium">Name</label>
+            <label htmlFor="name" className="text-sm font-medium">
+              Nombre
+            </label>
             <input
               id="name"
               required
@@ -42,7 +46,9 @@ export default function RegisterPage() {
             />
           </div>
           <div className="grid gap-1.5">
-            <label htmlFor="email" className="text-sm font-medium">Email</label>
+            <label htmlFor="email" className="text-sm font-medium">
+              Correo
+            </label>
             <input
               id="email"
               type="email"
@@ -50,11 +56,13 @@ export default function RegisterPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="rounded border px-3 py-2 outline-none focus:ring-2 focus:ring-brand-500"
-              placeholder="you@example.com"
+              placeholder="tu@email.com"
             />
           </div>
           <div className="grid gap-1.5">
-            <label htmlFor="password" className="text-sm font-medium">Password</label>
+            <label htmlFor="password" className="text-sm font-medium">
+              Contraseña
+            </label>
             <input
               id="password"
               type="password"
@@ -62,22 +70,26 @@ export default function RegisterPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="rounded border px-3 py-2 outline-none focus:ring-2 focus:ring-brand-500"
+              placeholder="Crea una contraseña"
             />
           </div>
           <div className="grid gap-1.5">
-            <label htmlFor="role" className="text-sm font-medium">Role</label>
+            <label htmlFor="role" className="text-sm font-medium">
+              Rol (opcional)
+            </label>
             <select
               id="role"
               value={role}
               onChange={(e) => setRole(e.target.value as any)}
               className="rounded border px-3 py-2 outline-none focus:ring-2 focus:ring-brand-500"
             >
-              <option value="member">Member</option>
-              <option value="manager">Manager</option>
-              <option value="admin">Admin</option>
+              <option value="member">Miembro</option>
+              <option value="manager">Gestor</option>
+              <option value="admin">Administrador</option>
             </select>
             <p className="text-xs text-neutral-500">
-              Backend controls actual privileges; this is only for initial preference.
+              El backend define los permisos reales; este valor es sólo de
+              preferencia inicial.
             </p>
           </div>
           {error ? <div className="text-sm text-rose-600">{error}</div> : null}
@@ -86,12 +98,14 @@ export default function RegisterPage() {
             disabled={loading}
             className="w-full rounded bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700 disabled:opacity-60"
           >
-            {loading ? "Creating account..." : "Create account"}
+            {loading ? "Creando..." : "Crear cuenta"}
           </button>
         </form>
         <p className="mt-4 text-sm text-neutral-600">
-          Already have an account?{" "}
-          <Link className="text-brand-700 underline" to="/login">Login</Link>
+          ¿Ya tienes cuenta?{" "}
+          <Link className="text-brand-700 underline" to="/login">
+            Inicia sesión
+          </Link>
         </p>
       </div>
     </main>

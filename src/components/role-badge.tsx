@@ -7,7 +7,10 @@ export function RoleBadge({ role = "member" as Role }) {
       : role === "manager"
       ? "bg-amber-100 text-amber-800"
       : "bg-emerald-100 text-emerald-700"
-  const label = role[0].toUpperCase() + role.slice(1)
+
+  const label =
+    role === "admin" ? "Administrador" : role === "manager" ? "Gestor" : "Miembro"
+
   return (
     <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs ${styles}`}>
       {label}

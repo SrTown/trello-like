@@ -7,7 +7,8 @@ import { RoleBadge } from "@/components/role-badge"
 export function Topbar() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
-  const initials = user?.name?.split(" ").map((x) => x[0]).slice(0, 2).join("") || "U"
+  const initials =
+    user?.name?.split(" ").map((x) => x[0]).slice(0, 2).join("") || "U"
 
   async function onLogout() {
     await logout()
@@ -28,21 +29,23 @@ export function Topbar() {
               <div className="h-8 w-8 rounded-full bg-white/15 text-white grid place-items-center font-medium">
                 {initials}
               </div>
-              <span className="hidden md:inline text-sm">{user?.name ?? "Guest"}</span>
+              <span className="hidden md:inline text-sm">
+                {user?.name ?? "Invitado"}
+              </span>
               {user ? (
                 <button
                   onClick={onLogout}
                   className="inline-flex items-center gap-1 rounded-md bg-white/10 px-3 py-1.5 text-sm hover:bg-white/20 transition"
                 >
                   <LogOut className="h-4 w-4" />
-                  Logout
+                  Cerrar sesión
                 </button>
               ) : (
                 <Link
                   to="/login"
                   className="inline-flex items-center gap-1 rounded-md bg-white/10 px-3 py-1.5 text-sm hover:bg-white/20 transition"
                 >
-                  Login
+                  Iniciar sesión
                 </Link>
               )}
             </div>
